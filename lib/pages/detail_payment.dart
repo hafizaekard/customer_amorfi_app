@@ -1,3 +1,4 @@
+import 'package:customer_app/pages/payment_rejected.dart';
 import 'package:customer_app/pages/transfer_payment.dart';
 import 'package:customer_app/shared/sharedvalues.dart';
 import 'package:customer_app/widgets/back_button_custom.dart';
@@ -43,43 +44,44 @@ class _DetailPaymentState extends State<DetailPayment> {
             const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
-  onPressed: () {
-    if (_selectedPayment == 'Transfer') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const TransferPayment(),
-        ),
-      );
-    } else if (_selectedPayment == 'Bayar di Toko') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const TransferPayment()
-        ),
-      );
-    } else {
-      // Tampilkan pesan jika belum pilih salah satu
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Silakan pilih metode pembayaran terlebih dahulu.'),
-        ),
-      );
-    }
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: blueColor,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30),
-    ),
-    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
-  ),
-  child: Text(
-    'Selanjutnya',
-    style: whiteTextStyle.copyWith(fontWeight: FontWeight.bold),
-  ),
-),
-
+                onPressed: () {
+                  if (_selectedPayment == 'Transfer') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const TransferPayment(),
+                      ),
+                    );
+                  } else if (_selectedPayment == 'Bayar di Toko') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const PaymentRejectedPage(),
+                      ),
+                    );
+                  } else {
+                    // Tampilkan pesan jika belum pilih salah satu
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            'Silakan pilih metode pembayaran terlebih dahulu.'),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: blueColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                ),
+                child: Text(
+                  'Selanjutnya',
+                  style: whiteTextStyle.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
             const SizedBox(height: 24),
           ],

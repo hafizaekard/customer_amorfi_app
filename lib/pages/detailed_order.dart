@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:customer_app/pages/confirm_order.dart';
 import 'package:customer_app/routes/custom_page_route.dart';
 import 'package:customer_app/shared/sharedvalues.dart';
@@ -17,6 +18,48 @@ class _DetailedOrderState extends State<DetailedOrder> {
   ];
   DateTime? _selectedDate;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedData();
+  }
+
+  Future<void> _loadSavedData() async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('temp_order_data')
+          .doc('current_customer')
+          .get();
+
+      if (doc.exists) {
+        final data = doc.data()!;
+        final List<String> items = List<String>.from(data['orderItems'] ?? []);
+        final String? dateStr = data['pickupDate'];
+
+        setState(() {
+          _itemControllers.clear();
+          for (final item in items) {
+            _itemControllers.add(TextEditingController(text: item));
+          }
+
+          if (_itemControllers.isEmpty) {
+            _itemControllers.add(TextEditingController());
+          }
+
+          if (dateStr != null && dateStr.contains('/')) {
+            final parts = dateStr.split('/');
+            final int day = int.tryParse(parts[0]) ?? 1;
+            final int month = int.tryParse(parts[1]) ?? 1;
+            final int year = int.tryParse(parts[2]) ?? 2000;
+            _selectedDate = DateTime(year, month, day);
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading saved order: $e');
+    }
+  }
+
   void _addItem() {
     setState(() {
       _itemControllers.add(TextEditingController());
@@ -29,12 +72,33 @@ class _DetailedOrderState extends State<DetailedOrder> {
     });
   }
 
-  void _navigateToConfirmOrder() {
-    Navigator.of(context).push(
-      CustomPageRoute(
-        page: const ConfirmOrder(),
-      ),
-    );
+  Future<void> _navigateToConfirmOrder() async {
+    try {
+      final List<String> items = _itemControllers
+          .map((controller) => controller.text.trim())
+          .where((text) => text.isNotEmpty)
+          .toList();
+
+      final String? dateString = _selectedDate != null
+          ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
+          : null;
+
+      await FirebaseFirestore.instance
+          .collection('temp_order_data')
+          .doc('current_customer')
+          .set({
+        'orderItems': items,
+        'pickupDate': dateString,
+      }, SetOptions(merge: true));
+
+      Navigator.of(context).push(
+        CustomPageRoute(
+          page: const ConfirmOrderPage(),
+        ),
+      );
+    } catch (e) {
+      debugPrint('Error saving detailed order: $e');
+    }
   }
 
   Future<void> _selectDate() async {
@@ -128,7 +192,6 @@ class _DetailedOrderState extends State<DetailedOrder> {
               ),
               const SizedBox(height: 10),
 
-              // Select Date
               GestureDetector(
                 onTap: _selectDate,
                 child: Container(

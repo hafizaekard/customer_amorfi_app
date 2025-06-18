@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:customer_app/pages/detailed_order.dart';
 import 'package:customer_app/routes/custom_page_route.dart';
-import 'package:customer_app/shared/sharedvalues.dart'; // pastikan ini mendefinisikan warna seperti whiteColor, blackTextStyle, dll
+import 'package:customer_app/shared/sharedvalues.dart';
 import 'package:customer_app/widgets/back_button_custom.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,59 @@ class _PersonalDataState extends State<PersonalData> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Listener untuk auto-save ke Firestore
+    _nameController.addListener(() {
+      _saveField('customerName', _nameController.text);
+    });
+
+    _phoneController.addListener(() {
+      _saveField('customerNumber', _phoneController.text);
+    });
+
+    _addressController.addListener(() {
+      _saveField('customerAddress', _addressController.text);
+    });
+
+    // Opsional: Muat data sebelumnya jika ada
+    _loadTempCustomerData();
+  }
+
+  // Simpan field individual ke Firestore
+  Future<void> _saveField(String field, String value) async {
+    try {
+      await _firestore
+          .collection('temp_order_data')
+          .doc('current_customer')
+          .set({field: value}, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint('Error saving $field: $e');
+    }
+  }
+
+  // Memuat data yang sebelumnya disimpan (jika ada)
+  Future<void> _loadTempCustomerData() async {
+    try {
+      final doc = await _firestore
+          .collection('temp_order_data')
+          .doc('current_customer')
+          .get();
+
+      if (doc.exists) {
+        final data = doc.data()!;
+        _nameController.text = data['customerName'] ?? '';
+        _phoneController.text = data['customerNumber'] ?? '';
+        _addressController.text = data['customerAddress'] ?? '';
+      }
+    } catch (e) {
+      debugPrint('Error loading customer data: $e');
+    }
+  }
 
   void _navigateToDetailedOrder() {
     Navigator.of(context).push(

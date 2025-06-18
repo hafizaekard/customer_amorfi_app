@@ -1,0 +1,2 @@
+C:/customerapp/customer_app/android/app/.cxx/Debug/142nocu1/x86/CMakeFiles/edit_cache.dir
+C:/customerapp/customer_app/android/app/.cxx/Debug/142nocu1/x86/CMakeFiles/rebuild_cache.dir
