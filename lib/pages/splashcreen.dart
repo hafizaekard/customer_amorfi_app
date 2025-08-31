@@ -1,4 +1,4 @@
-import 'package:customer_app/pages/customer_data.dart';
+import 'package:customer_app/pages/welcome_page.dart';
 import 'package:customer_app/shared/sharedvalues.dart';
 import 'package:flutter/material.dart';
 
@@ -17,49 +17,48 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const CustomerData(),
+          builder: (context) => const WelcomePage(),
         ),
       );
     });
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: lightGreyColor,
-    body: Center(
-      child: Container(
-        height: 100,
-        width: 100,
-        decoration: BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: blackColor.withOpacity(0.2),
-              blurRadius: 3,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: lightGreyColor,
+      body: Center(
+        child: Container(
+          height: 100,
+          width: 100,
+          decoration: BoxDecoration(
+            color: whiteColor,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: blackColor.withOpacity(0.2),
+                blurRadius: 3,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: Image.asset(
+              'assets/pic/logoamorfiinvent.png',
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.error,
+                  size: 50,
+                  color: redColor,
+                );
+              },
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: Image.asset(
-            'lib/assets/pic/logoamorfiinvent.png',
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(
-                Icons.error,
-                size: 50,
-                color: redColor,
-              );
-            },
           ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

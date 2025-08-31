@@ -1,0 +1,2 @@
+C:/customerapp/customer_app/android/app/.cxx/Debug/4t5g2570/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/customerapp/customer_app/android/app/.cxx/Debug/4t5g2570/armeabi-v7a/CMakeFiles/rebuild_cache.dir

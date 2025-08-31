@@ -22,7 +22,6 @@ class _PersonalDataState extends State<PersonalData> {
   void initState() {
     super.initState();
 
-    // Listener untuk auto-save ke Firestore
     _nameController.addListener(() {
       _saveField('customerName', _nameController.text);
     });
@@ -35,11 +34,9 @@ class _PersonalDataState extends State<PersonalData> {
       _saveField('customerAddress', _addressController.text);
     });
 
-    // Opsional: Muat data sebelumnya jika ada
     _loadTempCustomerData();
   }
 
-  // Simpan field individual ke Firestore
   Future<void> _saveField(String field, String value) async {
     try {
       await _firestore
@@ -51,7 +48,6 @@ class _PersonalDataState extends State<PersonalData> {
     }
   }
 
-  // Memuat data yang sebelumnya disimpan (jika ada)
   Future<void> _loadTempCustomerData() async {
     try {
       final doc = await _firestore
@@ -71,9 +67,27 @@ class _PersonalDataState extends State<PersonalData> {
   }
 
   void _navigateToDetailedOrder() {
-    Navigator.of(context).push(
-      CustomPageRoute(
-        page: const DetailedOrder(),
+    if (_nameController.text.trim().isEmpty) {
+      _showSnackBar('Nama belum diisi');
+    } else if (_phoneController.text.trim().isEmpty) {
+      _showSnackBar('Nomor Telepon belum diisi');
+    } else if (_addressController.text.trim().isEmpty) {
+      _showSnackBar('Alamat belum diisi');
+    } else {
+      Navigator.of(context).push(
+        CustomPageRoute(
+          page: const DetailedOrder(),
+        ),
+      );
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: blackColor,
       ),
     );
   }
@@ -83,7 +97,7 @@ class _PersonalDataState extends State<PersonalData> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        backgroundColor: newBlueColor,
+        backgroundColor: beigeColor,
         shape: Border(bottom: BorderSide(color: blueColor.withOpacity(0.2))),
         automaticallyImplyLeading: false,
         leading: BackButtonCustom(
@@ -115,7 +129,7 @@ class _PersonalDataState extends State<PersonalData> {
               child: ElevatedButton(
                 onPressed: _navigateToDetailedOrder,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: blueColor,
+                  backgroundColor: blackColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),

@@ -33,7 +33,7 @@ TextStyle orangeTextStyle = GoogleFonts.inter(color: orangeColor);
 TextStyle blueTextStyle = GoogleFonts.inter(color: blueColor);
 TextStyle headerTextStyle = GoogleFonts.ebGaramond(color: blackColor);
 TextStyle newpurpleTextStyle = GoogleFonts.inter(color: newpurpleColor);
-TextStyle quotesTextStyle = GoogleFonts.lobster(color: yellowColor);
+TextStyle quotesTextStyle = GoogleFonts.elsieSwashCaps(color: blackColor);
 TextStyle burnSiennaTextStyle = GoogleFonts.inter(color: burnSiennaColor);
 
 //FontWeight

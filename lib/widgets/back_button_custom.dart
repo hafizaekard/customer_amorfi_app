@@ -16,7 +16,7 @@ class BackButtonCustom extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.arrow_back_ios_new_rounded, 
-        color: blueColor,
+        color: blackColor,
         size: 25),
       onPressed: onPressed,
       splashColor: whiteColor.withOpacity(0.1),
